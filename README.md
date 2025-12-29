@@ -76,7 +76,7 @@ Everything runs **locally** on your machine.
 
 ## 🚀 Step-by-Step Setup Guide
 
-1. ### 1️⃣ Install Node.js
+### 1️⃣ Install Node.js
 Download from:
 https://nodejs.org
 
@@ -85,19 +85,17 @@ Verify:
 node --version
 npm --version
 
-
-2. Install Python
+2️⃣ Install Python
 
 Download from:
 https://www.python.org
 
 ⚠️ During install, check “Add Python to PATH”
 
-Verify: 
+Verify:
 python --version
 
-
-3. Install FFmpeg (Required for Whisper)
+3️⃣ Install FFmpeg (Required for Whisper)
 
 Download Windows build from:
 https://www.gyan.dev/ffmpeg/builds/
@@ -107,8 +105,7 @@ Add bin folder to PATH.
 Verify:
 
 ffmpeg -version
-
-4️. Install Ollama (LLM Runtime)
+4️⃣ Install Ollama (LLM Runtime)
 
 Download from:
 https://ollama.com
@@ -122,16 +119,16 @@ Pull the model:
 
 ollama pull llama3
 
-5️. Install Python Dependencies
+5️⃣ Install Python Dependencies
 pip install openai-whisper edge-tts
 
-6️. Install Node.js Dependencies
+6️⃣ Install Node.js Dependencies
 
 From project root:
 
 npm install
 
-7️. Start the Backend Server
+7️⃣ Start the Backend Server
 node server.js
 
 
@@ -139,7 +136,7 @@ You should see:
 
 AI Call Server running at http://localhost:3000
 
-8️. Open the Voice UI
+8️⃣ Open the Voice UI
 
 Open mic.html in your browser.
 
@@ -180,4 +177,3 @@ Single-user demo (no session handling)
 Not production-ready
 
 This project is intended for learning, demos, and experimentation.
-<img width="1634" height="486" alt="image" src="https://github.com/user-attachments/assets/643fb0ff-904d-4ebd-aa87-a52dfbb94917" />
