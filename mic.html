@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Voice Agent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #0d6efd22, #0b1020);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', system-ui;
+      color: #fff;
+    }
+
+    .voice-card {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(14px);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    }
+
+    .mic-circle {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0d6efd, #6f9cff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      font-size: 36px;
+      box-shadow: 0 0 30px #0d6efd88;
+      transition: 0.3s;
+    }
+
+    .mic-circle.recording {
+      box-shadow: 0 0 50px #ff4d4d;
+      background: linear-gradient(135deg, #ff4d4d, #ff9999);
+    }
+
+    .output-box {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 10px;
+      padding: 12px;
+      min-height: 80px;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="voice-card">
+
+  <div class="text-center mb-3">
+    <h4>AI Voice Agent</h4>
+    <small class="text-info">Speak naturally — AI is listening</small>
+  </div>
+
+  <div class="mic-circle" id="mic">
+    <i class="bi bi-mic-fill"></i>
+  </div>
+
+  <div class="d-flex justify-content-center gap-3 mb-3">
+    <button id="start" class="btn btn-success px-4">
+      <i class="bi bi-play-fill"></i> Start
+    </button>
+    <button id="stop" class="btn btn-danger px-4" disabled>
+      <i class="bi bi-stop-fill"></i> Stop
+    </button>
+  </div>
+
+  <div class="output-box" id="output">
+    Waiting for voice input...
+  </div>
+
+</div>
+
+<script>
+  let recorder;
+  let chunks = [];
+
+  const startBtn = document.getElementById("start");
+  const stopBtn = document.getElementById("stop");
+  const output = document.getElementById("output");
+  const mic = document.getElementById("mic");
+
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    recorder = new MediaRecorder(stream);
+
+    recorder.ondataavailable = e => chunks.push(e.data);
+
+    recorder.onstop = async () => {
+      mic.classList.remove("recording");
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+
+      const blob = new Blob(chunks, { type: "audio/wav" });
+      chunks = [];
+
+      const formData = new FormData();
+      formData.append("audio", blob);
+
+      try {
+        output.textContent = "Processing...";
+
+        const res = await fetch("http://localhost:3000/talk", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await res.json();
+
+        output.textContent =
+          "You: " + data.user + "\n\nAI: " + data.ai;
+
+        new Audio("http://localhost:3000/" + data.audio).play();
+
+      } catch (err) {
+        output.textContent = "Error processing voice. Please try again.";
+      }
+    };
+  });
+
+  startBtn.onclick = () => {
+    recorder.start();
+    mic.classList.add("recording");
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+    output.textContent = "Listening...";
+  };
+
+  stopBtn.onclick = () => recorder.stop();
+</script>
+
+</body>
+</html>
