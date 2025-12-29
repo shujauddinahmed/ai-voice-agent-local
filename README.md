@@ -81,7 +81,7 @@ Download from:
 https://nodejs.org
 
 Verify:
-```bash
+bash
 node --version
 npm --version
 
@@ -177,3 +177,6 @@ Single-user demo (no session handling)
 Not production-ready
 
 This project is intended for learning, demos, and experimentation.
+
+<img width="1634" height="486" alt="image" src="https://github.com/user-attachments/assets/6a45a0b3-1c9c-4ad1-88f9-f018af404d3e" />
+
